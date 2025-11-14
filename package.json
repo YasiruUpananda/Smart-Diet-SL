@@ -1,8 +1,9 @@
 {
   "name": "smart-diet-sl",
   "version": "1.0.0",
-  "description": "MERN Stack Nutrition Advisor Application",
+  "description": "A comprehensive MERN stack application for managing nutrition and diet plans specifically designed for Sri Lankan diets.",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "install:all": "npm install --prefix Client && npm install --prefix Server",
     "install:client": "npm install --prefix Client",
@@ -13,7 +14,12 @@
     "build": "npm run build --prefix Client",
     "start": "npm start --prefix Server",
     "start:server": "npm start --prefix Server",
-    "start:client": "npm run preview --prefix Client"
+    "start:client": "npm run preview --prefix Client",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YasiruUpananda/Smart-Diet-SL.git"
   },
   "keywords": [
     "mern",
@@ -25,8 +31,12 @@
   ],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YasiruUpananda/Smart-Diet-SL/issues"
+  },
+  "homepage": "https://github.com/YasiruUpananda/Smart-Diet-SL#readme",
   "devDependencies": {
     "concurrently": "^9.1.0"
   }
 }
-

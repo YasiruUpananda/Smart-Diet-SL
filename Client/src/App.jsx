@@ -3,16 +3,28 @@ import { Toaster } from 'react-hot-toast';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
+import AdminRoute from './components/common/AdminRoute';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import Home from './pages/home/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Calculator from './pages/calculator/Calculator';
 import DietPlans from './pages/diet-plans/DietPlans';
 import DietPlanner from './pages/diet-planner/DietPlanner';
-import Profile from './pages/profile/Profile';
 import MealLogging from './pages/meal-logging/MealLogging';
 import SriLankanPlates from './pages/sri-lankan-plates/SriLankanPlates';
-import ProtectedRoute from './components/common/ProtectedRoute';
+import Profile from './pages/profile/Profile';
+import Products from './pages/products/Products';
+import ProductDetail from './pages/products/ProductDetail';
+import Cart from './pages/cart/Cart';
+import Checkout from './pages/checkout/Checkout';
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ProductsAdmin from './pages/admin/ProductsAdmin';
+import AddProduct from './pages/admin/AddProduct';
+import EditProduct from './pages/admin/EditProduct';
+import OrdersAdmin from './pages/admin/OrdersAdmin';
+import UsersAdmin from './pages/admin/UsersAdmin';
 
 function App() {
   return (
@@ -22,15 +34,70 @@ function App() {
           <Header />
           <main className="flex-grow">
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/calculator" element={<Calculator />} />
               <Route path="/diet-plans" element={<DietPlans />} />
               <Route path="/diet-planner" element={<ProtectedRoute><DietPlanner /></ProtectedRoute>} />
               <Route path="/meal-logging" element={<ProtectedRoute><MealLogging /></ProtectedRoute>} />
               <Route path="/sri-lankan-plates" element={<SriLankanPlates />} />
               <Route path="/profile" element={<Profile />} />
+              
+              {/* Admin Routes - Protected */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/products"
+                element={
+                  <AdminRoute>
+                    <ProductsAdmin />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/products/new"
+                element={
+                  <AdminRoute>
+                    <AddProduct />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/products/:id/edit"
+                element={
+                  <AdminRoute>
+                    <EditProduct />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/orders"
+                element={
+                  <AdminRoute>
+                    <OrdersAdmin />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminRoute>
+                    <UsersAdmin />
+                  </AdminRoute>
+                }
+              />
             </Routes>
           </main>
           <Footer />

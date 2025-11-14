@@ -7,6 +7,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 const Header = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart || { cartItems: [] });
   const { language, changeLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
@@ -118,6 +119,30 @@ const Header = () => {
             {/* User Menu / Auth */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-2 border-l border-green-500 pl-3 ml-2">
+                {/* Cart Link */}
+                <Link 
+                  to="/cart" 
+                  className="px-3 py-2 rounded hover:bg-green-700 transition text-sm font-medium relative"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  {cartItems.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </Link>
                 {/* User Dropdown */}
                 <div className="relative group">
                   <button className="px-3 py-2 rounded hover:bg-green-700 transition text-sm font-medium flex items-center">
@@ -153,6 +178,18 @@ const Header = () => {
                       >
                         {t('logMeal')}
                       </Link>
+                      {/* Admin Link - Only show if user is admin */}
+                      {user?.role === 'admin' && (
+                        <>
+                          <hr className="my-1" />
+                          <Link
+                            to="/admin"
+                            className="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100 font-semibold"
+                          >
+                            Admin Dashboard
+                          </Link>
+                        </>
+                      )}
                       <hr className="my-1" />
                       <button
                         onClick={handleLogout}
@@ -329,6 +366,18 @@ const Header = () => {
               {isAuthenticated ? (
                 <div className="pt-2 border-t border-green-500">
                   <Link
+                    to="/cart"
+                    className="block px-3 py-2 rounded hover:bg-green-700 transition flex items-center justify-between"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>Cart</span>
+                    {cartItems.length > 0 && (
+                      <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {cartItems.length}
+                      </span>
+                    )}
+                  </Link>
+                  <Link
                     to="/profile"
                     className="block px-3 py-2 rounded hover:bg-green-700 transition"
                     onClick={() => setMobileMenuOpen(false)}
@@ -342,6 +391,15 @@ const Header = () => {
                   >
                     {t('logMeal')}
                   </Link>
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="block px-3 py-2 rounded hover:bg-green-700 transition bg-yellow-500 text-white font-semibold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-3 py-2 rounded hover:bg-green-700 transition text-red-200"
@@ -376,4 +434,3 @@ const Header = () => {
 };
 
 export default Header;
-

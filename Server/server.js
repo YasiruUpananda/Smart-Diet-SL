@@ -4,6 +4,9 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import connectDB from './config/database.js';
 
+// Load environment variables FIRST
+dotenv.config();
+
 // Import routes
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
@@ -15,9 +18,7 @@ import traditionalFoodRoutes from './routes/traditionalFoodRoutes.js';
 import dailyTipRoutes from './routes/dailyTipRoutes.js';
 import mealLogRoutes from './routes/mealLogRoutes.js';
 import sriLankanPlateRoutes from './routes/sriLankanPlateRoutes.js';
-
-// Load environment variables
-dotenv.config();
+import adminRoutes from './routes/adminRoutes.js';
 
 const app = express();
 
@@ -47,8 +48,23 @@ const initializeDB = async () => {
 initializeDB();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  process.env.CLIENT_URL
+].filter(Boolean); // Remove any undefined values
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -65,6 +81,7 @@ app.use('/api/traditional-foods', traditionalFoodRoutes);
 app.use('/api/daily-tips', dailyTipRoutes);
 app.use('/api/meal-logs', mealLogRoutes);
 app.use('/api/sri-lankan-plates', sriLankanPlateRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
