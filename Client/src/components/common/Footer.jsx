@@ -18,13 +18,18 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/products" className="hover:text-white transition">
-                  Products
+                <a href="/diet-plans" className="hover:text-white transition">
+                  Diet Plans
                 </a>
               </li>
               <li>
-                <a href="/diet-plans" className="hover:text-white transition">
-                  Diet Plans
+                <a href="/calculator" className="hover:text-white transition">
+                  Calculator
+                </a>
+              </li>
+              <li>
+                <a href="/sri-lankan-plates" className="hover:text-white transition">
+                  Generate Plate
                 </a>
               </li>
             </ul>

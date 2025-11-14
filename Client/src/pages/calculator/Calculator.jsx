@@ -1,40 +1,51 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { fetchProducts } from '../../store/slices/productSlice';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import api from '../../services/api';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const Calculator = () => {
-  const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const { language, t } = useLanguage();
+  const [foods, setFoods] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedFoods, setSelectedFoods] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    const fetchFoods = async () => {
+      try {
+        const { data } = await api.get('/traditional-foods');
+        setFoods(data);
+      } catch (error) {
+        console.error('Error fetching foods:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFoods();
+  }, []);
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFoods = foods.filter((food) => {
+    const name = food.name?.[language] || food.name?.en || '';
+    return name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
-  const addProduct = (product) => {
-    if (!selectedProducts.find((p) => p._id === product._id)) {
-      setSelectedProducts([...selectedProducts, product]);
-      setQuantities({ ...quantities, [product._id]: 100 }); // Default 100g
+  const addFood = (food) => {
+    if (!selectedFoods.find((f) => f._id === food._id)) {
+      setSelectedFoods([...selectedFoods, food]);
+      const defaultAmount = food.servingSize?.amount || 100;
+      setQuantities({ ...quantities, [food._id]: defaultAmount });
     }
   };
 
-  const removeProduct = (productId) => {
-    setSelectedProducts(selectedProducts.filter((p) => p._id !== productId));
+  const removeFood = (foodId) => {
+    setSelectedFoods(selectedFoods.filter((f) => f._id !== foodId));
     const newQuantities = { ...quantities };
-    delete newQuantities[productId];
+    delete newQuantities[foodId];
     setQuantities(newQuantities);
   };
 
-  const updateQuantity = (productId, quantity) => {
-    setQuantities({ ...quantities, [productId]: parseFloat(quantity) || 0 });
+  const updateQuantity = (foodId, quantity) => {
+    setQuantities({ ...quantities, [foodId]: parseFloat(quantity) || 0 });
   };
 
   const calculateNutrition = () => {
@@ -44,15 +55,16 @@ const Calculator = () => {
     let totalFat = 0;
     let totalFiber = 0;
 
-    selectedProducts.forEach((product) => {
-      const quantity = quantities[product._id] || 0;
-      const multiplier = quantity / 100; // Convert to per 100g basis
+    selectedFoods.forEach((food) => {
+      const quantity = quantities[food._id] || 0;
+      const servingSize = food.servingSize?.amount || 100;
+      const multiplier = quantity / servingSize; // Convert to per serving basis
 
-      totalCalories += (product.nutrition?.calories || 0) * multiplier;
-      totalProtein += (product.nutrition?.protein || 0) * multiplier;
-      totalCarbs += (product.nutrition?.carbs || 0) * multiplier;
-      totalFat += (product.nutrition?.fat || 0) * multiplier;
-      totalFiber += (product.nutrition?.fiber || 0) * multiplier;
+      totalCalories += (food.nutrition?.calories || 0) * multiplier;
+      totalProtein += (food.nutrition?.protein || 0) * multiplier;
+      totalCarbs += (food.nutrition?.carbs || 0) * multiplier;
+      totalFat += (food.nutrition?.fat || 0) * multiplier;
+      totalFiber += (food.nutrition?.fiber || 0) * multiplier;
     });
 
     return {
@@ -71,78 +83,89 @@ const Calculator = () => {
       <h1 className="text-3xl font-bold mb-8">Nutrition Calculator</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Product Selection */}
+        {/* Food Selection */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Add Products</h2>
+            <h2 className="text-xl font-semibold mb-4">Add Traditional Foods</h2>
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search foods..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
             />
-            <div className="max-h-96 overflow-y-auto space-y-2">
-              {filteredProducts.map((product) => (
-                <div
-                  key={product._id}
-                  className="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
-                >
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{product.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      {product.nutrition?.calories || 0} cal per 100g
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => addProduct(product)}
-                    disabled={selectedProducts.find((p) => p._id === product._id)}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {selectedProducts.find((p) => p._id === product._id)
-                      ? 'Added'
-                      : 'Add'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Selected Products */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Selected Products</h2>
-            {selectedProducts.length === 0 ? (
-              <p className="text-gray-500">No products selected</p>
+            {loading ? (
+              <div className="text-center py-8">Loading foods...</div>
             ) : (
-              <div className="space-y-4">
-                {selectedProducts.map((product) => (
-                  <div
-                    key={product._id}
-                    className="flex items-center justify-between p-4 border rounded"
-                  >
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{product.name}</h3>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div>
-                        <label className="text-sm text-gray-600">Quantity (g)</label>
-                        <input
-                          type="number"
-                          value={quantities[product._id] || 0}
-                          onChange={(e) => updateQuantity(product._id, e.target.value)}
-                          className="w-24 px-2 py-1 border border-gray-300 rounded ml-2"
-                          min="0"
-                        />
+              <div className="max-h-96 overflow-y-auto space-y-2">
+                {filteredFoods.map((food) => {
+                  const foodName = food.name?.[language] || food.name?.en || 'Unknown';
+                  return (
+                    <div
+                      key={food._id}
+                      className="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{foodName}</h3>
+                        <p className="text-sm text-gray-600">
+                          {food.nutrition?.calories || 0} cal per {food.servingSize?.amount || 100}{food.servingSize?.unit || 'g'}
+                        </p>
                       </div>
                       <button
-                        onClick={() => removeProduct(product._id)}
-                        className="text-red-500 hover:text-red-700"
+                        onClick={() => addFood(food)}
+                        disabled={selectedFoods.find((f) => f._id === food._id)}
+                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Remove
+                        {selectedFoods.find((f) => f._id === food._id)
+                          ? 'Added'
+                          : 'Add'}
                       </button>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Selected Foods */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-4">Selected Foods</h2>
+            {selectedFoods.length === 0 ? (
+              <p className="text-gray-500">No foods selected</p>
+            ) : (
+              <div className="space-y-4">
+                {selectedFoods.map((food) => {
+                  const foodName = food.name?.[language] || food.name?.en || 'Unknown';
+                  const unit = food.servingSize?.unit || 'g';
+                  return (
+                    <div
+                      key={food._id}
+                      className="flex items-center justify-between p-4 border rounded"
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{foodName}</h3>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div>
+                          <label className="text-sm text-gray-600">Quantity ({unit})</label>
+                          <input
+                            type="number"
+                            value={quantities[food._id] || 0}
+                            onChange={(e) => updateQuantity(food._id, e.target.value)}
+                            className="w-24 px-2 py-1 border border-gray-300 rounded ml-2"
+                            min="0"
+                          />
+                        </div>
+                        <button
+                          onClick={() => removeFood(food._id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

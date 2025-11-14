@@ -1,0 +1,39 @@
+[
+  {
+    "tip": {
+      "en": "Substitute half your white rice with a portion of boiled Manioc for lower calories",
+      "si": "අඩු කැලරි සඳහා ඔබේ සුදු අරිසි අඩක් උකුල් මඤ්ඤොක්කාවක් සමඟ ප්‍රතිස්ථාපනය කරන්න",
+      "ta": "குறைந்த கலோரிகளுக்கு உங்கள் வெள்ளை அரிசியில் பாதியை வேகவைத்த மரவள்ளிக்கிழங்குடன் மாற்றுங்கள்"
+    },
+    "category": "weight-loss",
+    "difficulty": "easy",
+    "culturalRelevance": "high",
+    "relatedFoods": ["Manioc", "Rice"],
+    "isActive": true
+  },
+  {
+    "tip": {
+      "en": "Use less oil when tempering your dhal - it still tastes great!",
+      "si": "ඔබේ පරිප්පුව තබන විට අඩු තෙල් භාවිතා කරන්න - එය තවමත් රසවත්ය!",
+      "ta": "உங்கள் பருப்பை தாளிக்கும்போது குறைந்த எண்ணெய் பயன்படுத்துங்கள் - இன்னும் சுவையாக இருக்கும்!"
+    },
+    "category": "cooking-tip",
+    "difficulty": "easy",
+    "culturalRelevance": "high",
+    "relatedFoods": ["Dhal"],
+    "isActive": true
+  },
+  {
+    "tip": {
+      "en": "Add Gotukola mallung to your plate for extra iron and calcium",
+      "si": "අමතර යකඩ සහ කැල්සියම් සඳහා ඔබේ තහඩුවට ගොටුකොළ මල්ලුං එකතු කරන්න",
+      "ta": "கூடுதல் இரும்புச்சத்து மற்றும் சுண்ணாம்புச்சத்திற்கு உங்கள் தட்டில் வல்லாரை மல்லுங் சேர்க்கவும்"
+    },
+    "category": "general-health",
+    "difficulty": "easy",
+    "culturalRelevance": "high",
+    "relatedFoods": ["Gotukola"],
+    "isActive": true
+  }
+]
+

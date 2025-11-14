@@ -10,7 +10,10 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import dietPlanRoutes from './routes/dietPlanRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
-import dietRoutes from './routes/diet.js';
+import traditionalFoodRoutes from './routes/traditionalFoodRoutes.js';
+import dailyTipRoutes from './routes/dailyTipRoutes.js';
+import mealLogRoutes from './routes/mealLogRoutes.js';
+import sriLankanPlateRoutes from './routes/sriLankanPlateRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -56,7 +59,10 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/diet-plans', dietPlanRoutes);
 app.use('/api/upload', uploadRoutes);
-app.use('/api/diet', dietRoutes);
+app.use('/api/traditional-foods', traditionalFoodRoutes);
+app.use('/api/daily-tips', dailyTipRoutes);
+app.use('/api/meal-logs', mealLogRoutes);
+app.use('/api/sri-lankan-plates', sriLankanPlateRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -127,4 +133,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
-
