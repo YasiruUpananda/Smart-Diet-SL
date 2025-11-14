@@ -12,7 +12,6 @@ import Checkout from './pages/checkout/Checkout';
 import Calculator from './pages/calculator/Calculator';
 import DietPlans from './pages/diet-plans/DietPlans';
 import Profile from './pages/profile/Profile';
-import ImageUploadTest from './pages/test/ImageUploadTest';
 import DietPlanner from './pages/DietPlanner';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
@@ -40,7 +39,6 @@ function App() {
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/diet-plans" element={<DietPlans />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/test/upload" element={<ImageUploadTest />} />
             <Route path="/diet-planner" element={<ProtectedRoute><DietPlanner /></ProtectedRoute>} />
           </Routes>
         </main>

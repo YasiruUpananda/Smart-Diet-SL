@@ -36,6 +36,11 @@ CLIENT_URL=http://localhost:5173
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+
+# Hugging Face AI (Optional - for AI Diet Plans - FREE!)
+# Get free token from https://huggingface.co/settings/tokens (optional, works without it)
+# HUGGINGFACE_API_KEY=your_huggingface_token
+# HUGGINGFACE_MODEL=mistralai/Mistral-7B-Instruct-v0.2
 ```
 
 ### Complete Server `.env` Example
