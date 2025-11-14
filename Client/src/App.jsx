@@ -13,7 +13,10 @@ import Calculator from './pages/calculator/Calculator';
 import DietPlans from './pages/diet-plans/DietPlans';
 import Profile from './pages/profile/Profile';
 import ImageUploadTest from './pages/test/ImageUploadTest';
-import AIPersonalizedPlan from './pages/diet-plans/AIPersonalizedPlan';
+import DietPlanner from './pages/DietPlanner';
+import ProtectedRoute from './components/common/ProtectedRoute';
+
+
 
 function App() {
   return (
@@ -36,9 +39,9 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/diet-plans" element={<DietPlans />} />
-            <Route path="/ai-plan" element={<AIPersonalizedPlan />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/test/upload" element={<ImageUploadTest />} />
+            <Route path="/diet-planner" element={<ProtectedRoute><DietPlanner /></ProtectedRoute>} />
           </Routes>
         </main>
         <Footer />

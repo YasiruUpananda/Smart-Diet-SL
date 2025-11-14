@@ -32,9 +32,6 @@ const Header = () => {
             <Link to="/diet-plans" className="hover:text-green-200 transition">
               Diet Plans
             </Link>
-            <Link to="/ai-plan" className="hover:text-green-200 transition"> {/* <--- ADD THIS LINE */}
-              AI Personal Plan
-            </Link>
             {isAuthenticated && (
               <Link to="/test/upload" className="hover:text-green-200 transition">
                 Test Upload

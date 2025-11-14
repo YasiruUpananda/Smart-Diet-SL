@@ -36,10 +36,6 @@ CLIENT_URL=http://localhost:5173
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
-
-# Google Generative AI (Optional - for AI Diet Plans)
-# Get this from https://aistudio.google.com/apikey
-GOOGLE_API_KEY=your_google_api_key
 ```
 
 ### Complete Server `.env` Example

@@ -1,71 +1,19 @@
+// Server/models/DietPlan.js
 import mongoose from 'mongoose';
 
-const mealSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const DietPlanSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  input: {
+    weight: Number,
+    height: Number,
+    age: Number,
+    bloodPressure: String,
+    sugar: String,
+    bodyType: String,
+    activityLevel: String
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  ingredients: [String],
-  calories: {
-    type: Number,
-    required: true,
-  },
-  image: {
-    type: String,
-    default: '',
-  },
-});
+  planText: { type: String, required: true },
+  metadata: { type: Object },
+}, { timestamps: true });
 
-const dietPlanSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: [true, 'Please add a diet plan title'],
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: [true, 'Please add a description'],
-    },
-    category: {
-      type: String,
-      required: true,
-      enum: ['weight-loss', 'weight-gain', 'diabetic', 'vegetarian', 'general', 'athletic'],
-    },
-    duration: {
-      type: Number,
-      required: true,
-      default: 7, // days
-    },
-    meals: {
-      breakfast: mealSchema,
-      lunch: mealSchema,
-      dinner: mealSchema,
-      snacks: [mealSchema],
-    },
-    totalCalories: {
-      type: Number,
-      required: true,
-    },
-    image: {
-      type: String,
-      default: '',
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const DietPlan = mongoose.model('DietPlan', dietPlanSchema);
-
-export default DietPlan;
-
+export default mongoose.model('DietPlan', DietPlanSchema);
