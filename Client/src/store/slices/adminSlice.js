@@ -135,6 +135,20 @@ export const getAdminUsers = createAsyncThunk(
   }
 );
 
+export const updateUserRole = createAsyncThunk(
+  'admin/updateUserRole',
+  async ({ userId, role }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.put(`/admin/users/${userId}/role`, { role });
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to update user role'
+      );
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: 'admin',
   initialState,
@@ -203,6 +217,23 @@ const adminSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(getAdminUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateUserRole.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.users.findIndex(
+          (u) => u._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.users[index] = action.payload;
+        }
+      })
+      .addCase(updateUserRole.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

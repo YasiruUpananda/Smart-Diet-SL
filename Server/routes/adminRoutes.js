@@ -7,6 +7,7 @@ import {
   getAdminOrders,
   updateAdminOrder,
   getAdminUsers,
+  updateUserRole,
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middlewares/auth.js';
 import { upload } from '../config/cloudinary.js';
@@ -35,5 +36,8 @@ router.route('/orders/:id')
 // User routes
 router.route('/users')
   .get(getAdminUsers);
+
+router.route('/users/:id/role')
+  .put(updateUserRole);
 
 export default router;

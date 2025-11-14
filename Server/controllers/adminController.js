@@ -272,3 +272,48 @@ export const getAdminUsers = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// @desc    Update user role
+// @route   PUT /api/admin/users/:id/role
+// @access  Private/Admin
+export const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const { id } = req.params;
+
+    // Validate role
+    if (!role || !['user', 'admin'].includes(role)) {
+      return res.status(400).json({ 
+        message: 'Invalid role. Role must be either "user" or "admin"' 
+      });
+    }
+
+    // Find user
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Prevent admin from changing their own role
+    if (req.user && req.user._id.toString() === id) {
+      return res.status(400).json({ 
+        message: 'You cannot change your own role' 
+      });
+    }
+
+    // Update role
+    user.role = role;
+    await user.save();
+
+    // Return updated user without password
+    const updatedUser = await User.findById(id).select('-password');
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    res.status(500).json({ 
+      message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
