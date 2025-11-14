@@ -16,12 +16,30 @@ dotenv.config();
 
 const app = express();
 
-// Connect to database (with error handling)
-connectDB().catch((error) => {
-  console.error('Failed to connect to database:', error);
-  console.error('Server will continue but database operations will fail');
-  console.error('Please check your MONGODB_URI in .env file');
-});
+// Connect to database (with error handling and retry logic)
+let dbConnected = false;
+
+const initializeDB = async () => {
+  try {
+    await connectDB();
+    dbConnected = true;
+    console.log('✅ Database initialization complete');
+  } catch (error) {
+    console.error('❌ Failed to connect to database:', error.message);
+    console.error('⚠️  Server will continue but database operations will fail');
+    console.error('💡 The server will attempt to reconnect automatically');
+    dbConnected = false;
+    
+    // Retry connection after 5 seconds
+    setTimeout(() => {
+      console.log('🔄 Retrying database connection...');
+      initializeDB();
+    }, 5000);
+  }
+};
+
+// Start database connection
+initializeDB();
 
 // Middleware
 app.use(cors({
