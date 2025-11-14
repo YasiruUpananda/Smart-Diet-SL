@@ -7,6 +7,33 @@ import connectDB from './config/database.js';
 // Load environment variables FIRST
 dotenv.config();
 
+// Add process error handlers to catch unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('\n❌ UNCAUGHT EXCEPTION - Server is crashing!');
+  console.error('==========================================');
+  console.error('Error Message:', error.message);
+  console.error('Error Name:', error.name);
+  console.error('\nFull Error:');
+  console.error(error);
+  console.error('\nStack Trace:');
+  console.error(error.stack);
+  console.error('==========================================\n');
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('\n❌ UNHANDLED REJECTION - Server is crashing!');
+  console.error('==========================================');
+  console.error('Reason:', reason);
+  console.error('Promise:', promise);
+  if (reason instanceof Error) {
+    console.error('Error Message:', reason.message);
+    console.error('Stack:', reason.stack);
+  }
+  console.error('==========================================\n');
+  process.exit(1);
+});
+
 // Import routes
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
@@ -149,6 +176,14 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+// Start server with error handling
+try {
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+} catch (error) {
+  console.error('Failed to start server:', error);
+  console.error('Error details:', error.message);
+  console.error('Stack:', error.stack);
+  process.exit(1);
+}
