@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import DailyTip from '../../components/common/DailyTip';
+import Chatbot from '../../components/common/Chatbot';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const Home = () => {
@@ -88,6 +89,8 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Chatbot - Fixed position bottom right */}
+      <Chatbot />
     </div>
   );
 };

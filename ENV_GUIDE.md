@@ -41,6 +41,20 @@ CLOUDINARY_API_SECRET=your_api_secret
 # Get free token from https://huggingface.co/settings/tokens (optional, works without it)
 # HUGGINGFACE_API_KEY=your_huggingface_token
 # HUGGINGFACE_MODEL=mistralai/Mistral-7B-Instruct-v0.2
+
+# OpenAI (Optional - for LankaNutri Chatbot)
+# Get API key from https://platform.openai.com/api-keys
+# Required for the AI chatbot feature on home page
+# OPENAI_API_KEY=sk-your-openai-api-key-here
+# OPENAI_MODEL=gpt-4o-mini (default) or gpt-3.5-turbo (cheaper option)
+ 
+ # Groq (Optional - alternative to OpenAI)
+ # Groq supports a range of public models; they occasionally deprecate older ones.
+ # If you use Groq, set GROQ_API_KEY and GROQ_MODEL. The deprecation page lists
+ # recommended replacements: https://console.groq.com/docs/deprecations
+ # Example: replace `llama-3.1-70b-versatile` with `llama-3.3-70b-versatile`.
+ # GROQ_API_KEY=gsk_your_groq_key_here
+ # GROQ_MODEL=llama-3.3-70b-versatile
 ```
 
 ### Complete Server `.env` Example
@@ -81,6 +95,14 @@ CLOUDINARY_API_SECRET=abcdefghijklmnopqrstuvwxyz123456
 # CORS Configuration
 # ============================================
 CLIENT_URL=http://localhost:5173
+
+# ============================================
+# OpenAI (Optional - for LankaNutri Chatbot)
+# ============================================
+# Get API key from https://platform.openai.com/api-keys
+# Required for the AI chatbot feature
+# OPENAI_API_KEY=sk-your-openai-api-key-here
+# OPENAI_MODEL=gpt-4o-mini (default) or gpt-3.5-turbo
 ```
 
 ---
@@ -178,6 +200,19 @@ VITE_API_URL=http://localhost:5000/api
 - **Production**: `https://your-api-domain.com/api`
 - **Note**: Must start with `VITE_` for Vite to expose it to the frontend
 
+#### `OPENAI_API_KEY` (Optional - for Chatbot)
+- **Description**: OpenAI API key for LankaNutri Advisor chatbot
+- **Get it from**: https://platform.openai.com/api-keys
+- **Required for**: AI chatbot feature on home page
+- **Note**: Sign up for OpenAI account and create API key
+- **Cost**: Pay-as-you-go pricing (check OpenAI pricing)
+
+#### `OPENAI_MODEL` (Optional - for Chatbot)
+- **Description**: OpenAI model to use for chatbot
+- **Default**: `gpt-4o-mini` (cost-effective option)
+- **Alternative**: `gpt-3.5-turbo` (cheaper but less capable)
+- **Note**: Higher-tier models cost more but provide better responses
+
 ---
 
 ## How to Get Credentials
@@ -208,6 +243,18 @@ VITE_API_URL=http://localhost:5000/api
    - **Cloud Name**: Found at the top of dashboard
    - **API Key**: Found in "Account Details"
    - **API Secret**: Found in "Account Details" (click "Reveal")
+
+### OpenAI (For LankaNutri Chatbot)
+
+1. Go to https://platform.openai.com
+2. Sign up for an account (if you don't have one)
+3. Go to API Keys section: https://platform.openai.com/api-keys
+4. Click "Create new secret key"
+5. Name your key (e.g., "Smart Diet SL Chatbot")
+6. Copy the API key (it starts with `sk-`)
+7. **Important**: Save it immediately - you won't be able to see it again!
+8. Add to `.env`: `OPENAI_API_KEY=sk-your-key-here`
+9. **Note**: OpenAI uses pay-as-you-go pricing. Check their pricing page for current rates.
 
 ### Generate JWT Secret
 
@@ -282,6 +329,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 - [ ] Add `PORT=5000`
 - [ ] Add `CLIENT_URL=http://localhost:5173`
 - [ ] (Optional) Add Cloudinary credentials
+- [ ] (Optional) Add OpenAI API key for chatbot
 - [ ] Create `Client/.env` file
 - [ ] Add `VITE_API_URL=http://localhost:5000/api`
 - [ ] Verify both files are in `.gitignore`
@@ -303,5 +351,24 @@ CLIENT_URL=http://localhost:5173
 ### Minimal Client `.env` (Required Only)
 ```env
 VITE_API_URL=http://localhost:5000/api
+```
+
+### Server `.env` with Chatbot (All Features)
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/smart-diet-sl
+JWT_SECRET=change_this_to_a_random_string_at_least_32_characters_long
+JWT_EXPIRE=7d
+CLIENT_URL=http://localhost:5173
+
+# Optional: For image uploads
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Optional: For AI chatbot
+OPENAI_API_KEY=sk-your-openai-api-key-here
+OPENAI_MODEL=gpt-4o-mini
 ```
 

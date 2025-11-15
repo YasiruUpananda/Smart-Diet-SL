@@ -10,6 +10,7 @@ A comprehensive MERN stack application for managing nutrition and diet plans spe
 - ✅ Nutrition Calculator
 - ✅ Recommended Diet Plans
 - ✅ User Profile Management
+- ✅ **AI LankaNutri Advisor Chatbot** (OpenAI-powered)
 - ✅ Image Upload with Cloudinary
 - ✅ Responsive Design with Tailwind CSS
 - ✅ State Management with Redux Toolkit
@@ -30,6 +31,7 @@ A comprehensive MERN stack application for managing nutrition and diet plans spe
 - MongoDB with Mongoose
 - JWT Authentication
 - Cloudinary (Image Upload)
+- OpenAI (AI Chatbot)
 - Bcrypt (Password Hashing)
 
 ## Project Structure
@@ -101,6 +103,8 @@ JWT_EXPIRE=7d
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+OPENAI_API_KEY=sk-your-openai-api-key-here
+OPENAI_MODEL=gpt-4o-mini
 CLIENT_URL=http://localhost:5173
 ```
 
@@ -150,6 +154,10 @@ Client will run on http://localhost:5173
 ### Client (.env)
 - `VITE_API_URL` - Backend API URL (default: http://localhost:5000/api)
 
+### Optional Environment Variables
+- `OPENAI_API_KEY` - OpenAI API key for LankaNutri Advisor chatbot (get from https://platform.openai.com/api-keys)
+- `OPENAI_MODEL` - OpenAI model to use (default: gpt-4o-mini, alternatives: gpt-3.5-turbo)
+
 ## API Endpoints
 
 ### Authentication
@@ -178,6 +186,11 @@ Client will run on http://localhost:5173
 - `POST /api/diet-plans` - Create diet plan (Admin)
 - `PUT /api/diet-plans/:id` - Update diet plan (Admin)
 - `DELETE /api/diet-plans/:id` - Delete diet plan (Admin)
+
+### LankaNutri Advisor Chatbot
+- `POST /api/chatbot/new` - Start new conversation (Public)
+- `POST /api/chatbot/chat` - Send message to chatbot (Public)
+- `POST /api/chatbot/clear` - Clear conversation history (Public)
 
 ## Getting Cloudinary Credentials
 

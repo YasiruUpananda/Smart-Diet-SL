@@ -46,6 +46,7 @@ import dailyTipRoutes from './routes/dailyTipRoutes.js';
 import mealLogRoutes from './routes/mealLogRoutes.js';
 import sriLankanPlateRoutes from './routes/sriLankanPlateRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import chatbotRoutes from './routes/chatbotRoutes.js';
 
 const app = express();
 
@@ -109,6 +110,7 @@ app.use('/api/daily-tips', dailyTipRoutes);
 app.use('/api/meal-logs', mealLogRoutes);
 app.use('/api/sri-lankan-plates', sriLankanPlateRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
