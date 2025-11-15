@@ -1,12 +1,21 @@
-import Groq from 'groq-sdk';
 import dotenv from 'dotenv';
+import Groq from 'groq-sdk';
 
 dotenv.config();
 
 // Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+let groq = null;
+
+try {
+  if (process.env.GROQ_API_KEY) {
+    groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
+  }
+} catch (error) {
+  console.warn('Failed to initialize Groq client:', error.message);
+  groq = null;
+}
 
 // System prompt for LankaNutri Advisor
 const SYSTEM_PROMPT = `You are "LankaNutri Advisor" — an expert AI Nutrition Assistant specialized in Sri Lankan dietary patterns, traditional meals, health conditions, and culturally grounded nutrition science. Your primary goal is to guide users toward healthier eating using foods commonly consumed in Sri Lanka.
@@ -126,10 +135,10 @@ export const chatWithBot = async (req, res) => {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    // Check if Groq API key is configured
-    if (!process.env.GROQ_API_KEY) {
-      return res.status(500).json({ 
-        error: 'Groq API key is not configured. Please set GROQ_API_KEY in your .env file.' 
+    // Check if Groq is available
+    if (!groq) {
+      return res.status(503).json({ 
+        error: 'Chatbot service is not available. Please configure GROQ_API_KEY in your .env file.' 
       });
     }
 
@@ -236,6 +245,13 @@ export const chatWithBot = async (req, res) => {
 // @access  Public
 export const startNewConversation = async (req, res) => {
   try {
+    // Check if Groq is available
+    if (!groq) {
+      return res.status(503).json({ 
+        error: 'Chatbot service is not available. Please install groq-sdk package: npm install groq-sdk' 
+      });
+    }
+
     // Check if Groq API key is configured
     if (!process.env.GROQ_API_KEY) {
       return res.status(500).json({ 
